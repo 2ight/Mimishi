@@ -14,7 +14,7 @@
             android:id="@+id/toolbar"
             layout="@layout/app_toolbar" />
 
-    <!--    <android.support.design.widget.TabLayout
+        <android.support.design.widget.TabLayout
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,8 +22,16 @@
             android:clickable="true"
             app:tabIndicatorColor="@color/colorTabIndicator"
             app:tabSelectedTextColor="@color/colorSelectedText"
-            app:tabTextColor="@color/colorTabText" />
--->
+            app:tabTextColor="@color/colorTabText"
+            />
+
     </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        />
 
 </android.support.design.widget.CoordinatorLayout>

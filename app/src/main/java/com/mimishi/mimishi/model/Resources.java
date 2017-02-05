@@ -5,5 +5,5 @@ package com.mimishi.mimishi.model;
  */
 
 public class Resources {
-    
+
 }

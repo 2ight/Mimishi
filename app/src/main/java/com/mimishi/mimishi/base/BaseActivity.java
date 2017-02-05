@@ -18,6 +18,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected abstract int getLayout();
     protected abstract Toolbar getToolbar();
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
