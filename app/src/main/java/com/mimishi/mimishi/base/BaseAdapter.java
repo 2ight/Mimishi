@@ -15,8 +15,8 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
     protected final int NORMAL_ITEM = 1;
     protected final int FOOTER_ITEM = 0;
 
-    private Context mContext;
-    private List<T> mDataSet = new ArrayList<>();
+    protected Context mContext;
+    protected List<T> mDataSet = new ArrayList<>();
     private boolean isShowFooter = true;
 
 
@@ -57,7 +57,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
     public void showFooter(){
         isShowFooter = true;
     }
-    public void hideShowFooter(){
+    public void hideFooter(){
         isShowFooter = false;
     }
 
