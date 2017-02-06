@@ -3,29 +3,26 @@ package com.mimishi.mimishi.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.net.http.SslError;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
-import android.webkit.DownloadListener;
-import android.webkit.SslErrorHandler;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import com.mimishi.mimishi.R;
 import com.mimishi.mimishi.adapter.MainFragmentAdapter;
 import com.mimishi.mimishi.base.BaseActivity;
+import com.tencent.smtt.export.external.interfaces.SslError;
+import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
+import com.tencent.smtt.export.external.interfaces.WebResourceError;
+import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
+import com.tencent.smtt.sdk.DownloadListener;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 
 /**
  * Created by chen on 17-2-6.
@@ -51,8 +48,13 @@ public class WebViewActivity extends BaseActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mWebView = (WebView) findViewById(R.id.web_view);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         WebSettings webSettings = mWebView.getSettings();
 
         Intent intent = getIntent();
@@ -61,8 +63,14 @@ public class WebViewActivity extends BaseActivity{
         Log.i("url", mUrl);
         mUrl = "http://www.javchan.me/";
         mWebView.setWebViewClient(new WebViewClient(){
+
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+            public boolean shouldOverrideUrlLoading(WebView webView, String s) {
+                webView.loadUrl(s);
+                return false;
+            }
+
+           /* public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     view.loadUrl(request.getUrl().toString());
                 }else{
@@ -71,7 +79,7 @@ public class WebViewActivity extends BaseActivity{
 
                 return false;
 //                        super.shouldOverrideUrlLoading(view, request);
-            }
+            }*/
 
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
@@ -143,12 +151,13 @@ public class WebViewActivity extends BaseActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.home:
+            case android.R.id.home:
                 exitThisActivity();
                 break;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
+
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK) && mWebView.canGoBack()) {
