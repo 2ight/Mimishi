@@ -35,7 +35,6 @@ public class MainActivity extends BaseActivity{
         mMainViewPager = (ViewPager) findViewById(R.id.view_pager_main);
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
-        //TODO 学习TabLayout, ViewPager, RecyclerView 的使用
         MainViewPagerAdapter viewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager(), this);
         viewPagerAdapter.addFragment(new MainFragment());
 

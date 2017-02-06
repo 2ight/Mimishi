@@ -18,7 +18,7 @@ import java.util.List;
 public class MainViewPagerAdapter extends FragmentPagerAdapter {
     private Context context;
     private List<Fragment> fragments = new ArrayList<>();
-    private String tabTitles[] = new String[]{"每日精选", "笑话", "图片", "动图","视频"};
+    private String tabTitles[] = new String[]{"最新", "最热", "最稳定", "无广告", "资源好"};
 
     public void addFragment(Fragment fragment) {
         fragments.add(fragment);
