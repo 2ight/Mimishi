@@ -11,13 +11,16 @@
         <activity android:name=".ui.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"
-                    android:configChanges="orientation|screenSize"
-                    android:hardwareAccelerated="true"
                     />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.activity.WebViewActivity"
+            android:configChanges="orientation|screenSize"
+            android:hardwareAccelerated="true"
+
+            />
     </application>
     
     <uses-permission android:name="android.permission.INTERNET"/>
