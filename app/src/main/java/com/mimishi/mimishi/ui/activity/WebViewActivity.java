@@ -36,7 +36,6 @@ public class WebViewActivity extends BaseActivity{
     @Override
     protected int getLayout() {
         getWindow().requestFeature(Window.FEATURE_PROGRESS);
-
         return R.layout.activity_webview;
     }
 
@@ -61,7 +60,7 @@ public class WebViewActivity extends BaseActivity{
         mUrl = intent.getStringExtra(MainFragmentAdapter.INTENT_URL);
 
         Log.i("url", mUrl);
-        mUrl = "http://www.javchan.me/";
+        mUrl = "http://www.baidu.com/";
         mWebView.setWebViewClient(new WebViewClient(){
 
             @Override
