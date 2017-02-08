@@ -2,7 +2,8 @@ package com.mimishi.mimishi.rx;
 
 import com.mimishi.mimishi.api.ApiService;
 import com.mimishi.mimishi.model.ResourcesMain;
-import com.mimishi.mimishi.verify.VerifyUsers;
+import com.mimishi.mimishi.model.SignedUsers;
+import com.mimishi.mimishi.model.VerifyingUsers;
 
 import java.util.concurrent.TimeUnit;
 
@@ -61,8 +62,16 @@ public class HttpMethods  {
 
     }
 
-    public void getVerifyingUsers(Subscriber<VerifyUsers> subscriber) {
+    public void getVerifyingUsers(Subscriber<VerifyingUsers> subscriber) {
         mApiService.getVerifyingUsers()
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void getSignedUsers(Subscriber<SignedUsers> subscriber) {
+        mApiService.getSignedUsers()
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

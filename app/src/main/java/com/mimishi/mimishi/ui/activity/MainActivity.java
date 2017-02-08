@@ -16,7 +16,7 @@ import com.mimishi.mimishi.MainApplication;
 import com.mimishi.mimishi.R;
 import com.mimishi.mimishi.adapter.MainViewPagerAdapter;
 import com.mimishi.mimishi.base.BaseActivity;
-import com.mimishi.mimishi.common.CommonDialog;
+import com.mimishi.mimishi.model.SignedUsers;
 import com.mimishi.mimishi.model.VerifyingUsers;
 import com.mimishi.mimishi.rx.HttpMethods;
 import com.mimishi.mimishi.ui.fragment.MainFragment;
@@ -30,15 +30,16 @@ import java.util.List;
 import rx.Subscriber;
 
 
-public class MainActivity extends BaseActivity{
+public class MainActivity extends BaseActivity {
 
     private Toolbar mToolbar;
     private ViewPager mMainViewPager;
     private TabLayout mTabLayout;
-    private long signTimeStamp = 0;
+    private long signTimeStamp = System.currentTimeMillis();
     private Context mContext;
     private EditText etSerialNum;
     private List<VerifyingUsers.UsersList> mUsersList = new ArrayList<>();
+    private List<SignedUsers.ItemList> mSignUsersList = new ArrayList<>();
 
     @Override
     protected int getLayout() {
@@ -69,21 +70,31 @@ public class MainActivity extends BaseActivity{
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-//                checkUsers();
-                showSignDialog();
+                checkUsers();
+//                showSignDialog();
             }
         }, setDelayTime());
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-               getUsersList();
+                getUsersList();
             }
-        }, 2000);
+        }, 1000);
+
+        if (PrefUtils.getIsSigned()) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getSignedTimeStamp();
+                }
+            }, 2000);
+        }
 
     }
 
     private void getUsersList() {
-        Subscriber subscriber = new Subscriber<VerifyingUsers>(){
+        Subscriber subscriber = new Subscriber<VerifyingUsers>() {
 
             @Override
             public void onCompleted() {
@@ -92,11 +103,12 @@ public class MainActivity extends BaseActivity{
 
             @Override
             public void onError(Throwable e) {
-
+                LogUtils.i("data list is onError");
             }
 
             @Override
             public void onNext(VerifyingUsers usersList) {
+                LogUtils.i("dataList is onNext");
                 mUsersList = usersList.list;
             }
 
@@ -106,8 +118,8 @@ public class MainActivity extends BaseActivity{
 
     }
 
-    public long setDelayTime(){
-        if(PrefUtils.getIsShowedSignDialog()){
+    public long setDelayTime() {
+        if (PrefUtils.getIsShowedSignDialog()) {
             return 1000;
         }
         return 60 * 1000 * 0;
@@ -115,21 +127,18 @@ public class MainActivity extends BaseActivity{
 
     private void checkUsers() {
 
-        if(PrefUtils.getIsSigned()){
-            if(PrefUtils.getSignTimeStamp() - signTimeStamp > 1000 * 60 * 30){
+        if (PrefUtils.getIsSigned()) {
+            if (PrefUtils.getSignTimeStamp() - signTimeStamp > 1000 * 60 * 30) {
                 //超过30分钟注册的，可能是第二用户
-                //// TODO: 17-2-7 验证signtime 有效性
                 showSignDialog();
-                PrefUtils.setIsShowedSignDialog(true);
             }
-        }else{
+        } else {
             showSignDialog();
-            PrefUtils.setIsShowedSignDialog(true);
         }
-
+        PrefUtils.setIsShowedSignDialog(true);
     }
 
-    public void showSignDialog(){
+    public void showSignDialog() {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View inputView = inflater.inflate(R.layout.dialog_input, null);
         etSerialNum = (EditText) inputView.findViewById(R.id.dialog_pwd);
@@ -144,29 +153,47 @@ public class MainActivity extends BaseActivity{
 
     }
 
-    public void verifyUsers(){
+    public void verifyUsers() {
+        LogUtils.i("gettext", String.valueOf(etSerialNum.getText()));
+        final String serialNum = String.valueOf(etSerialNum.getText());
+        boolean isValid = VerifyUsers.verifyUsers(mContext, serialNum, mUsersList);
+        if (isValid) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            builder.setTitle("验证结果").setMessage("验证成功！")
+                    .setCancelable(false)
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            PrefUtils.setIsSigned(true);
+                            PrefUtils.setSignTimeStamp(System.currentTimeMillis());
+                            PrefUtils.setSerialNum(serialNum);
+                        }
+                    }).show();
 
-        // TODO: 17-2-8 正在验证对话框
-        CommonDialog.progressBarDialog(this);
-        boolean isValid = VerifyUsers.verifyUsers(mContext, String.valueOf(etSerialNum.getText()), mUsersList);
-        if(isValid){
-            CommonDialog.verifySuccess();
-        }else{
-            CommonDialog.verifyFailed();
-            showSignDialog();
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("验证结果").setMessage("验证失败！")
+                    .setCancelable(false)
+                    .setPositiveButton("重新验证", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            showSignDialog();
+                        }
+                    })
+                    .show();
         }
-        // TODO: 17-2-8 验证完成对话框， 公布验证结果，成功则进行一系列配置，失败则重新调回对话框
 
     }
 
     private DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialogInterface, int i) {
-            if(mUsersList.size() > 0){
+            if (mUsersList.size() > 0) {
                 verifyUsers();
-            }else{
+            } else {
                 LogUtils.i("datalist is empty");
                 getUsersList();
+                showSignDialog();
             }
         }
     };
@@ -177,8 +204,40 @@ public class MainActivity extends BaseActivity{
         }
     };
 
+    //获取已激活的序列号的时间戳进行检查
+    private void getSignedTimeStamp() {
+        Subscriber subscriber = new Subscriber<SignedUsers>() {
 
+            @Override
+            public void onCompleted() {
 
+            }
 
+            @Override
+            public void onError(Throwable e) {
+                LogUtils.i("data list is onError");
+            }
+
+            @Override
+            public void onNext(SignedUsers usersList) {
+                LogUtils.i("dataList is onNext");
+                mSignUsersList = usersList.list;
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String serialNum = PrefUtils.getSerialNum();
+                        for (int i = 0; i < mSignUsersList.size(); i++){
+                            if(serialNum.equals(mSignUsersList.get(i).serial_num)){
+                                signTimeStamp = mSignUsersList.get(i).sign_time;
+                                break;
+                            }
+                        }
+                    }
+                }).start();
+            }
+        };
+        HttpMethods.getInstance().getSignedUsers(subscriber);
+
+    }
 
 }

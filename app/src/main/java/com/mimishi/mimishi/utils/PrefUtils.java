@@ -14,6 +14,7 @@ public class PrefUtils  {
     private static final String IS_SIGNED = "is_signed";
     private static final String SIGN_TIME_STAMP = "sign_time_stamp";
     private static final String IS_SHOWED_SIGN_DIALOG = "is_showed_sign_dialog";
+    private static final String SIGN_SERIAL_NUM = "serial_num";
 
     private static SharedPreferences getDefaultSP(){
         return PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext());
@@ -39,6 +40,13 @@ public class PrefUtils  {
     }
     public static boolean getIsShowedSignDialog(){
         return getDefaultSP().getBoolean(IS_SHOWED_SIGN_DIALOG, false);
+    }
+
+    public static void setSerialNum(String s) {
+        getDefaultSP().edit().putString(SIGN_SERIAL_NUM, s).apply();
+    }
+    public static String getSerialNum(){
+        return getDefaultSP().getString(SIGN_SERIAL_NUM, "");
     }
 
 }

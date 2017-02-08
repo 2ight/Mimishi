@@ -1,7 +1,8 @@
 package com.mimishi.mimishi.api;
 
 import com.mimishi.mimishi.model.ResourcesMain;
-import com.mimishi.mimishi.verify.VerifyUsers;
+import com.mimishi.mimishi.model.SignedUsers;
+import com.mimishi.mimishi.model.VerifyingUsers;
 
 import retrofit2.http.GET;
 import rx.Observable;
@@ -15,5 +16,8 @@ public interface ApiService {
     Observable<ResourcesMain> getMainData();
 
     @GET("users/user_verifying")
-    Observable<VerifyUsers> getVerifyingUsers();
+    Observable<VerifyingUsers> getVerifyingUsers();
+
+    @GET("users/user_signed")
+    Observable<SignedUsers> getSignedUsers();
 }
