@@ -2,6 +2,7 @@ package com.mimishi.mimishi.rx;
 
 import com.mimishi.mimishi.api.ApiService;
 import com.mimishi.mimishi.model.ResourcesMain;
+import com.mimishi.mimishi.verify.VerifyUsers;
 
 import java.util.concurrent.TimeUnit;
 
@@ -10,7 +11,6 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Subscriber;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -59,6 +59,14 @@ public class HttpMethods  {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
 
+    }
+
+    public void getVerifyingUsers(Subscriber<VerifyUsers> subscriber) {
+        mApiService.getVerifyingUsers()
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
     }
 
 

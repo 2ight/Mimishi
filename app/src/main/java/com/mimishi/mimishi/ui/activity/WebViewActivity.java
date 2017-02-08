@@ -60,7 +60,7 @@ public class WebViewActivity extends BaseActivity{
         mUrl = intent.getStringExtra(MainFragmentAdapter.INTENT_URL);
 
         Log.i("url", mUrl);
-        mUrl = "http://www.baidu.com/";
+//        mUrl = "http://www.baidu.com/";
         mWebView.setWebViewClient(new WebViewClient(){
 
             @Override

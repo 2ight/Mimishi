@@ -1,10 +1,10 @@
 package com.mimishi.mimishi.api;
 
 import com.mimishi.mimishi.model.ResourcesMain;
-
-import java.util.Observable;
+import com.mimishi.mimishi.verify.VerifyUsers;
 
 import retrofit2.http.GET;
+import rx.Observable;
 
 /**
  * Created by chen on 17-2-6.
@@ -12,6 +12,8 @@ import retrofit2.http.GET;
 public interface ApiService {
 
     @GET("resources/resource_main_list")
-    rx.Observable<ResourcesMain> getMainData();
+    Observable<ResourcesMain> getMainData();
 
+    @GET("users/user_verifying")
+    Observable<VerifyUsers> getVerifyingUsers();
 }

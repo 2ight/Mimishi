@@ -8,7 +8,7 @@
     <color name="colorTabText">#000000</color>
     <color name="colorTabIndicator">#ff3344</color>
     <color name="colorSelectedText">#ff3344</color>
-
+    <color name="color_white_item">#ddddde</color>
 
 
 </resources>

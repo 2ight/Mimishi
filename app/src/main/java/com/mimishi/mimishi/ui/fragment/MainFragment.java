@@ -15,9 +15,8 @@ import com.mimishi.mimishi.adapter.MainFragmentAdapter;
 import com.mimishi.mimishi.base.BaseFragment;
 import com.mimishi.mimishi.common.RecyclerViewItemDecoration;
 import com.mimishi.mimishi.model.ResourcesMain;
-import com.mimishi.mimishi.rx.HttpMethods;
 
-
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Subscriber;
@@ -49,7 +48,7 @@ public class MainFragment extends BaseFragment{
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addItemDecoration(new RecyclerViewItemDecoration(40));
-        mRefreshLayout.setRefreshing(true);
+//        mRefreshLayout.setRefreshing(true);
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -59,10 +58,39 @@ public class MainFragment extends BaseFragment{
         });
         getData();
         return view;
-
     }
 
     private void getData() {
+        List<ResourcesMain.ItemList> list = new ArrayList<>();
+        ResourcesMain.ItemList itemList = new ResourcesMain.ItemList();
+        itemList.item_index = 1;
+        itemList.item_name = "项目名称，，最多两行项目名称，，最多两行项目名称，，最多两行项目名称，，最多两行项目名称，，最多两行";
+        itemList.item_url = "http://www.sekongge4.com/?jump";
+
+        ResourcesMain.ItemList itemList0 = new ResourcesMain.ItemList();
+        itemList0.item_index = 2;
+        itemList0.item_name = "项目名称，，最多两行项目名称，，最多两行项目名称最多两行项目名称最多两行项目名称，，最多两行项目名称，，最多两行项目名称，，最多两行最多两行最多两行最多两行最多两行最多两行";
+        itemList0.item_url = "https://www.kink.com/";
+
+        ResourcesMain.ItemList itemList1 = new ResourcesMain.ItemList();
+        itemList1.item_index = 3;
+        itemList1.item_name = "项目名称，，最多两行项目名称，，最多两行项目名称，，最多两行项目名称，，最多两行项目名称，，最多两行";
+        itemList1.item_url = "http://www.javchan.me";
+
+        ResourcesMain.ItemList itemList2 = new ResourcesMain.ItemList();
+        itemList2.item_index = 4;
+        itemList2.item_name = "项目名称，，最多两行项目名称，，最多两行项目名称，，最多两行项目名称，，最多两行项目名称，，最多两行";
+        itemList2.item_url = "https://www.gg231.com";
+
+
+        list.add(itemList);
+        list.add(itemList1);
+        list.add(itemList2);
+        list.add(itemList0);
+        mAdapter.addItems(list);
+
+        mRefreshLayout.setRefreshing(false);
+
         Subscriber subscriber = new Subscriber<ResourcesMain>(){
 
             @Override
@@ -93,7 +121,7 @@ public class MainFragment extends BaseFragment{
 
         };
 
-        HttpMethods.getInstance().getMainData(subscriber);
+//        HttpMethods.getInstance().getMainData(subscriber);
 
     }
 

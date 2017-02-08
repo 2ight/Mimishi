@@ -24,7 +24,6 @@ public class MainFragmentAdapter extends BaseAdapter<ResourcesMain.ItemList>{
 
     public MainFragmentAdapter(Context context) {
         super(context);
-        //在这里要测试执行的顺序是否正确
         hideFooter();
     }
 
