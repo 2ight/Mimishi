@@ -1,5 +1,6 @@
 package com.mimishi.mimishi.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -42,8 +43,9 @@ public class MainActivity extends BaseActivity {
     private EditText etSerialNum;
     private List<VerifyingUsers.UsersList> mUsersList = new ArrayList<>();
     private List<SignedUsers.ItemList> mSignUsersList = new ArrayList<>();
-    private AlertDialog mProgressDialog;
+//    private AlertDialog mProgressDialog;
     private Handler mHandler;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected int getLayout() {
@@ -90,7 +92,7 @@ public class MainActivity extends BaseActivity {
                     public void run() {
                         showSignDialog();
                     }
-                }, 1000 * 60 * 5);
+                }, 1000 * 60 * 0);
             }
         }
 
@@ -112,6 +114,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onNext(VerifyingUsers usersList) {
                 mUsersList = usersList.list;
+                LogUtils.i("获取到列报表", String.valueOf(mUsersList.size()));
                 mHandler = new Handler() {
                     @Override
                     public void handleMessage(Message msg) {
@@ -133,10 +136,14 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void run() {
                         Message msg = new Message();
+                        LogUtils.i(String.valueOf(etSerialNum.getText()));
                         boolean isValid = false;
                         for (int i = 0; i < mUsersList.size(); i++) {
-                            if (mUsersList.get(i).serial_num.equals(etSerialNum.getText().toString())) {
-                                if (System.currentTimeMillis() - mUsersList.get(i).sign_time < 1000 * 60 * 20) {
+                            LogUtils.i(String.valueOf(mUsersList.get(i).serial_num));
+                            if (mUsersList.get(i).serial_num.equals(String.valueOf(etSerialNum.getText()))) {
+                                LogUtils.i("检测到该激活码");
+                                LogUtils.i(String.valueOf(System.currentTimeMillis()), String.valueOf(mUsersList.get(i).sign_time));
+                                if ((System.currentTimeMillis() - mUsersList.get(i).sign_time) < 1000 * 60 * 20) {
                                     isValid = true;
                                     break;
                                 }
@@ -161,6 +168,27 @@ public class MainActivity extends BaseActivity {
         HttpMethods.getInstance().getVerifyingUsers(subscriber);
     }
 
+    private void showProgressDialog() {
+/*
+        LayoutInflater inflater = LayoutInflater.from(mContext);
+        View progressView = inflater.inflate(R.layout.dialog_progress_bar, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+*/
+//        ProgressDialog.show(this, "", "正在验证，请稍后...", true, false);
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage("正在验证，请稍后...");
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.show();
+
+
+//        builder.setView(progressView).setCancelable(false);
+//        mProgressDialog = builder.create();
+//                builder.show();
+//        mProgressDialog = builder.create();
+    }
+
+    // TODO: 17-2-15 progressdialog 的dismiss()
+    
     public void showSignDialog() {
         PrefUtils.setIsShowedSignDialog(true);
         LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -216,15 +244,5 @@ public class MainActivity extends BaseActivity {
                 .show();
     }
 
-    private void showProgressDialog() {
-        LayoutInflater inflater = LayoutInflater.from(mContext);
-        View progressView = inflater.inflate(R.layout.dialog_progress_bar, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setTitle("提示")
-                .setView(progressView)
-                .setCancelable(false)
-                .show();
-        mProgressDialog = builder.create();
-    }
 
 }
