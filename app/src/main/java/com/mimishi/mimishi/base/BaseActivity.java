@@ -8,6 +8,8 @@ import android.view.WindowManager;
 
 import com.mimishi.mimishi.utils.ToastUtils;
 
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
+
 /**
  * Created by chen on 17-2-4.
  */
@@ -39,6 +41,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     public void onDestroy() {
+        JCVideoPlayer.releaseAllVideos();
         super.onDestroy();
     }
 

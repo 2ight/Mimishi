@@ -14,9 +14,10 @@ import com.mimishi.mimishi.R;
 import com.mimishi.mimishi.adapter.MainFragmentAdapter;
 import com.mimishi.mimishi.base.BaseFragment;
 import com.mimishi.mimishi.common.RecyclerViewItemDecoration;
-import com.mimishi.mimishi.model.ResourcesMain;
+import com.mimishi.mimishi.model.ResourcesVideo;
+import com.mimishi.mimishi.rx.HttpMethods;
+import com.mimishi.mimishi.utils.ToastUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import rx.Subscriber;
@@ -32,10 +33,15 @@ public class MainFragment extends BaseFragment{
     private SwipeRefreshLayout mRefreshLayout;
     private boolean isRefreshing;
     private boolean isRefresh = false;
+    private int mFragmentType;
 
     @Override
     protected int getLayout() {
         return R.layout.fragment_main;
+    }
+
+    public MainFragment(int type){
+        mFragmentType = type;
     }
 
     @Nullable
@@ -47,51 +53,32 @@ public class MainFragment extends BaseFragment{
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addItemDecoration(new RecyclerViewItemDecoration(40));
-//        mRefreshLayout.setRefreshing(true);
+        mRecyclerView.addItemDecoration(new RecyclerViewItemDecoration(60));
+        mRefreshLayout.setRefreshing(true);
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getData();
+                getDataList();
                 isRefresh = true;
             }
         });
-        getData();
+        getDataList();
         return view;
     }
 
-    private void getData() {
-        List<ResourcesMain.ItemList> list = new ArrayList<>();
-        ResourcesMain.ItemList itemList = new ResourcesMain.ItemList();
-        itemList.item_index = 1;
-        itemList.item_name = "项目名称，，最多两行项目名称，，最多两行项目名称，，最多两行项目名称，，最多两行项目名称，，最多两行";
-        itemList.item_url = "http://www.sekongge4.com/?jump";
+    private void getDataList() {
+        switch (mFragmentType){
+            case 1:
+                getMainDataList();
+                break;
+            case 2:
+                getUncensoredDataList();
+                break;
+        }
+    }
 
-        ResourcesMain.ItemList itemList0 = new ResourcesMain.ItemList();
-        itemList0.item_index = 2;
-        itemList0.item_name = "项目名称，，最多两行项目名称，，最多两行项目名称最多两行项目名称最多两行项目名称，，最多两行项目名称，，最多两行项目名称，，最多两行最多两行最多两行最多两行最多两行最多两行";
-        itemList0.item_url = "https://www.kink.com/";
-
-        ResourcesMain.ItemList itemList1 = new ResourcesMain.ItemList();
-        itemList1.item_index = 3;
-        itemList1.item_name = "项目名称，，最多两行项目名称，，最多两行项目名称，，最多两行项目名称，，最多两行项目名称，，最多两行";
-        itemList1.item_url = "http://www.javchan.me";
-
-        ResourcesMain.ItemList itemList2 = new ResourcesMain.ItemList();
-        itemList2.item_index = 4;
-        itemList2.item_name = "项目名称，，最多两行项目名称，，最多两行项目名称，，最多两行项目名称，，最多两行项目名称，，最多两行";
-        itemList2.item_url = "https://www.gg231.com";
-
-
-        list.add(itemList);
-        list.add(itemList1);
-        list.add(itemList2);
-        list.add(itemList0);
-        mAdapter.addItems(list);
-
-        mRefreshLayout.setRefreshing(false);
-
-        Subscriber subscriber = new Subscriber<ResourcesMain>(){
+    private void getUncensoredDataList() {
+        Subscriber subscriber = new Subscriber<ResourcesVideo>(){
 
             @Override
             public void onCompleted() {
@@ -104,25 +91,62 @@ public class MainFragment extends BaseFragment{
             }
 
             @Override
-            public void onNext(ResourcesMain resourcesMain) {
-                List<ResourcesMain.ItemList> list = resourcesMain.list;
+            public void onNext(ResourcesVideo resourcesVideo) {
+                mRefreshLayout.setRefreshing(false);
+                List<ResourcesVideo.ItemList> list = resourcesVideo.list;
+                if(list.size() == 0){
+                    ToastUtils.showMessage(getContext(), "没有获取到数据，检查网络后重试");
+                    return;
+                }
                 if(!isRefresh){
                     mAdapter.addItems(list);
                 }else{
                     mAdapter.refreshItems(list);
                     isRefresh = false;
                 }
-                mRefreshLayout.setRefreshing(false);
 
-                Log.i("It`s first succed.", resourcesMain.name);
-                Log.i("item_", list.get(0).item_name);
             }
 
+        };
+        HttpMethods.getInstance().getUncensoredData(subscriber);
+    }
+
+    private void getMainDataList() {
+
+        Subscriber subscriber = new Subscriber<ResourcesVideo>(){
+
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(ResourcesVideo resourcesVideo) {
+                mRefreshLayout.setRefreshing(false);
+                List<ResourcesVideo.ItemList> list = resourcesVideo.list;
+                if(list.size() == 0){
+                    ToastUtils.showMessage(getContext(), "没有获取到数据，检查网络后重试");
+                    return;
+                }
+                if(!isRefresh){
+                    mAdapter.addItems(list);
+                }else{
+                    mAdapter.refreshItems(list);
+                    isRefresh = false;
+                }
+
+                Log.i("It`s first succeed.", resourcesVideo.name);
+                Log.i("item_", list.get(0).item_title);
+            }
 
         };
-
-//        HttpMethods.getInstance().getMainData(subscriber);
-
+        HttpMethods.getInstance().getMainData(subscriber);
     }
+
 
 }

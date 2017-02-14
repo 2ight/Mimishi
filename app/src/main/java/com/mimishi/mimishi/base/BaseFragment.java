@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
+
 /**
  * Created by chen on 16-11-29.
  */
@@ -68,6 +70,7 @@ public abstract class BaseFragment extends Fragment {
     public void onDestroy() {
         isInit = false;
         isLoad = false;
+        JCVideoPlayer.releaseAllVideos();
         super.onDestroy();
     }
 

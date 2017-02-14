@@ -1,7 +1,7 @@
 package com.mimishi.mimishi.rx;
 
 import com.mimishi.mimishi.api.ApiService;
-import com.mimishi.mimishi.model.ResourcesMain;
+import com.mimishi.mimishi.model.ResourcesVideo;
 import com.mimishi.mimishi.model.SignedUsers;
 import com.mimishi.mimishi.model.VerifyingUsers;
 
@@ -12,6 +12,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -53,25 +54,32 @@ public class HttpMethods  {
         return SingletonHolder.INSTANCE;
     }
 
-    public void getMainData(Subscriber<ResourcesMain> subscriber){
-        mApiService.getMainData()
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber);
-
-    }
-
-    public void getVerifyingUsers(Subscriber<VerifyingUsers> subscriber) {
-        mApiService.getVerifyingUsers()
+    public Subscription getMainData(Subscriber<ResourcesVideo> subscriber){
+        return mApiService.getMainData()
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
 
-    public void getSignedUsers(Subscriber<SignedUsers> subscriber) {
-        mApiService.getSignedUsers()
+    public Subscription getVerifyingUsers(Subscriber<VerifyingUsers> subscriber) {
+        return mApiService.getVerifyingUsers()
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public Subscription getSignedUsers(Subscriber<SignedUsers> subscriber) {
+        return mApiService.getSignedUsers()
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public Subscription getUncensoredData(Subscriber<ResourcesVideo> subscriber) {
+        return mApiService.getUncensoredData()
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

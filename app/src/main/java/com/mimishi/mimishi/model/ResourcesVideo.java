@@ -6,7 +6,7 @@ import java.util.List;
  * Created by chen on 17-2-4.
  */
 
-public class ResourcesMain {
+public class ResourcesVideo {
 
     public int index;
     public String name;
@@ -14,8 +14,9 @@ public class ResourcesMain {
 
     public static class ItemList{
         public int item_index;
-        public String item_name;
-        public String item_url;
+        public String item_title;
+        public String item_thumbnail;
+        public String item_video;
 
     }
 
