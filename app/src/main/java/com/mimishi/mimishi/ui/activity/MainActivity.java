@@ -23,6 +23,8 @@ import com.mimishi.mimishi.ui.fragment.MainFragment;
 import com.mimishi.mimishi.utils.LogUtils;
 import com.mimishi.mimishi.utils.PrefUtils;
 import com.mimishi.mimishi.verify.VerifyUsers;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +59,10 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MainApplication.addActivity(this);
+
+        ImageLoader imageLoader = ImageLoader.getInstance();
+        imageLoader.init(ImageLoaderConfiguration.createDefault(this));
+
         mContext = this;
         mMainViewPager = (ViewPager) findViewById(R.id.view_pager_main);
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
@@ -80,7 +86,7 @@ public class MainActivity extends BaseActivity {
             public void run() {
                 getUsersList();
             }
-        }, 1000);
+        }, 500);
 
         if (PrefUtils.getIsSigned()) {
             new Handler().postDelayed(new Runnable() {
@@ -103,12 +109,12 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
-                LogUtils.i("data list is onError");
+                LogUtils.i("verifying list is onError");
             }
 
             @Override
             public void onNext(VerifyingUsers usersList) {
-                LogUtils.i("dataList is onNext");
+                LogUtils.i("verifying  is onNext");
                 mUsersList = usersList.list;
             }
 
@@ -119,10 +125,10 @@ public class MainActivity extends BaseActivity {
     }
 
     public long setDelayTime() {
-        if (PrefUtils.getIsShowedSignDialog()) {
-            return 1000;
+        if (PrefUtils.getIsShowedSignDialog() && !PrefUtils.getIsSigned()) {
+            return 2000;
         }
-        return 60 * 1000 * 0;
+        return 60 * 1000 * 1;
     }
 
     private void checkUsers() {
@@ -215,12 +221,12 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
-                LogUtils.i("data list is onError");
+                LogUtils.i("signed list is onError");
             }
 
             @Override
             public void onNext(SignedUsers usersList) {
-                LogUtils.i("dataList is onNext");
+                LogUtils.i("signed user list is onNext");
                 mSignUsersList = usersList.list;
                 new Thread(new Runnable() {
                     @Override

@@ -15,9 +15,9 @@ public interface ApiService {
     @GET("resources/resource_main_list")
     Observable<ResourcesMain> getMainData();
 
-    @GET("users/user_verifying")
+    @GET("users/users_verifying")
     Observable<VerifyingUsers> getVerifyingUsers();
 
-    @GET("users/user_signed")
+    @GET("users/users_signed")
     Observable<SignedUsers> getSignedUsers();
 }
