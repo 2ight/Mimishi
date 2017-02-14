@@ -54,14 +54,6 @@ public class HttpMethods  {
         return SingletonHolder.INSTANCE;
     }
 
-    public Subscription getMainData(Subscriber<ResourcesVideo> subscriber){
-        return mApiService.getMainData()
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber);
-    }
-
     public Subscription getVerifyingUsers(Subscriber<VerifyingUsers> subscriber) {
         return mApiService.getVerifyingUsers()
                 .subscribeOn(Schedulers.io())
@@ -78,8 +70,24 @@ public class HttpMethods  {
                 .subscribe(subscriber);
     }
 
+    public Subscription getMainData(Subscriber<ResourcesVideo> subscriber){
+        return mApiService.getMainData()
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
     public Subscription getUncensoredData(Subscriber<ResourcesVideo> subscriber) {
         return mApiService.getUncensoredData()
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public Subscription getHDData(Subscriber<ResourcesVideo> subscriber) {
+        return mApiService.getHDData()
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

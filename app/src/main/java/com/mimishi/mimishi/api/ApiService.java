@@ -24,4 +24,7 @@ public interface ApiService {
     @GET("resources/resource_uncensored")
     Observable<ResourcesVideo> getUncensoredData();
 
+    @GET("resources/resource_high_difinition")
+    Observable<ResourcesVideo> getHDData();
+
 }

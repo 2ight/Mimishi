@@ -62,7 +62,7 @@ public class MainFragment extends BaseFragment{
                 isRefresh = true;
             }
         });
-        getDataList();
+//        getDataList();
         return view;
     }
 
@@ -74,7 +74,45 @@ public class MainFragment extends BaseFragment{
             case 2:
                 getUncensoredDataList();
                 break;
+            case 3:
+                getHighDefinition();
+                break;
+
         }
+    }
+
+    private void getHighDefinition() {
+        Subscriber subscriber = new Subscriber<ResourcesVideo>(){
+
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(ResourcesVideo resourcesVideo) {
+                mRefreshLayout.setRefreshing(false);
+                List<ResourcesVideo.ItemList> list = resourcesVideo.list;
+                if(list.size() == 0){
+                    ToastUtils.showMessage(getContext(), "没有获取到数据，检查网络后重试");
+                    return;
+                }
+                if(!isRefresh){
+                    mAdapter.addItems(list);
+                }else{
+                    mAdapter.refreshItems(list);
+                    isRefresh = false;
+                }
+
+            }
+
+        };
+        HttpMethods.getInstance().getHDData(subscriber);
     }
 
     private void getUncensoredDataList() {

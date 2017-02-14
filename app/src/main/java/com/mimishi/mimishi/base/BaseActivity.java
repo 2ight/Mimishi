@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import com.mimishi.mimishi.utils.ToastUtils;
 
@@ -31,6 +32,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         mToolbar = getToolbar();
         initToolbar();
+        JCVideoPlayer.setThumbImageViewScalType(ImageView.ScaleType.CENTER_CROP);
     }
 
     private void initToolbar() {
