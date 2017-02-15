@@ -3,6 +3,8 @@ package com.mimishi.mimishi.ui.activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,6 +24,7 @@ import com.mimishi.mimishi.model.SignedUsers;
 import com.mimishi.mimishi.model.VerifyingUsers;
 import com.mimishi.mimishi.rx.HttpMethods;
 import com.mimishi.mimishi.ui.fragment.MainFragment;
+import com.mimishi.mimishi.update.SearchUpdate;
 import com.mimishi.mimishi.utils.LogUtils;
 import com.mimishi.mimishi.utils.PrefUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -46,6 +49,7 @@ public class MainActivity extends BaseActivity {
 //    private AlertDialog mProgressDialog;
     private Handler mHandler;
     private ProgressDialog mProgressDialog;
+    public static String TYPE_FRAGMENT_VIDEO = "type_fragment_video";
 
     @Override
     protected int getLayout() {
@@ -72,11 +76,18 @@ public class MainActivity extends BaseActivity {
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
         MainViewPagerAdapter viewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager(), this);
-        viewPagerAdapter.addFragment(new MainFragment(1));
-        viewPagerAdapter.addFragment(new MainFragment(2));
-        viewPagerAdapter.addFragment(new MainFragment(2));
-        viewPagerAdapter.addFragment(new MainFragment(2));
-        viewPagerAdapter.addFragment(new MainFragment(2));
+        Bundle bundle = new Bundle();
+        bundle.putInt(TYPE_FRAGMENT_VIDEO, 1);
+//        viewPagerAdapter.addFragment(MainFragment.initFragmentType(1));
+        viewPagerAdapter.addFragment(new MainFragment(bundle));
+        bundle.putInt(TYPE_FRAGMENT_VIDEO, 2);
+        viewPagerAdapter.addFragment(new MainFragment(bundle));
+        bundle.putInt(TYPE_FRAGMENT_VIDEO, 1);
+        viewPagerAdapter.addFragment(new MainFragment(bundle));
+        bundle.putInt(TYPE_FRAGMENT_VIDEO, 2);
+        viewPagerAdapter.addFragment(new MainFragment(bundle));
+        bundle.putInt(TYPE_FRAGMENT_VIDEO, 1);
+        viewPagerAdapter.addFragment(new MainFragment(bundle));
 
         mMainViewPager.setAdapter(viewPagerAdapter);
         mTabLayout.setupWithViewPager(mMainViewPager);
@@ -95,6 +106,21 @@ public class MainActivity extends BaseActivity {
                 }, 1000 * 60 * 0);
             }
         }
+
+        checkUpdate();
+    }
+
+    private void checkUpdate() {
+        int versionCode = 1;
+        PackageManager pm = this.getPackageManager();
+        try {
+            PackageInfo info = pm.getPackageInfo(this.getPackageName(), 0);
+            versionCode = info.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        SearchUpdate searchUpdate = new SearchUpdate(this);
+        searchUpdate.checkUpdate(versionCode, 2000);
 
     }
 

@@ -16,6 +16,7 @@ import com.mimishi.mimishi.base.BaseFragment;
 import com.mimishi.mimishi.common.RecyclerViewItemDecoration;
 import com.mimishi.mimishi.model.ResourcesVideo;
 import com.mimishi.mimishi.rx.HttpMethods;
+import com.mimishi.mimishi.ui.activity.MainActivity;
 import com.mimishi.mimishi.utils.ToastUtils;
 
 import java.util.List;
@@ -33,15 +34,23 @@ public class MainFragment extends BaseFragment{
     private SwipeRefreshLayout mRefreshLayout;
     private boolean isRefreshing;
     private boolean isRefresh = false;
-    private int mFragmentType;
+    private static int mFragmentType;
+
+    public MainFragment(Bundle bundle) {
+        mFragmentType = bundle.getInt(MainActivity.TYPE_FRAGMENT_VIDEO);
+    }
+
+    public static void initFragmentType(int type){
+        mFragmentType = type;
+    }
 
     @Override
     protected int getLayout() {
         return R.layout.fragment_main;
     }
 
-    public MainFragment(int type){
-        mFragmentType = type;
+    public MainFragment() {
+
     }
 
     @Nullable

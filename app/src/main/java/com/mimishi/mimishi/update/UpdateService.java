@@ -11,7 +11,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
 
-import com.example.chen.memo.utils.LogUtils;
+import com.mimishi.mimishi.utils.LogUtils;
 
 
 /**
@@ -45,7 +45,7 @@ public class UpdateService extends Service {
 
         //设置下载地址
         DownloadManager.Request down = new DownloadManager.Request(
-        Uri.parse("https://github.com/bdpqchen/UpdateApps/raw/master/memo/latest/latest.apk"));
+        Uri.parse("https://github.com/mimishi705911/Mimishi/raw/master/app/app-release.apk"));
         // 设置允许使用的网络类型，这里是移动网络和wifi都可以
         down.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE | DownloadManager.Request.NETWORK_WIFI);
 
@@ -58,7 +58,7 @@ public class UpdateService extends Service {
         down.setVisibleInDownloadsUi(true);
 
         // 设置下载后文件存放的位置
-        down.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS, "jianji.apk");
+        down.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS, "mimishi.apk");
 
         // 将下载请求放入队列
         manager.enqueue(down);

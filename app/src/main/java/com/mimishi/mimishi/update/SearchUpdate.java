@@ -28,7 +28,7 @@ public class SearchUpdate {
 
     private Handler mHandler;
     private Context mContext;
-    private final String version_url = "https://raw.githubusercontent.com/mimishi705911/Mimishi/master/memo/latest/latest.json";
+    private final String version_url = "https://raw.githubusercontent.com/mimishi705911/Mimishi/master/data/json/update/latest.json";
     private boolean isAuto;
     private DialogInterface.OnClickListener newApkDownLoadListener;
 
@@ -50,7 +50,6 @@ public class SearchUpdate {
                     case 1:
                         //获取成功
                         GithubUpdate githubUpdate = (GithubUpdate) msg.obj;
-                        LogUtils.i("gson parse successful", githubUpdate.version_name);
                         if(githubUpdate.version_code > versionCode){
                             showUpdateDialog(githubUpdate.new_features);
                         }else{
@@ -119,6 +118,7 @@ public class SearchUpdate {
         builder.setTitle("发现最新版本");
         builder.setMessage("新特性：" + "\n" + "    " + new_features);
         builder.setPositiveButton("下载更新", newApkDownLoadListener);
+        builder.setCancelable(false);
         builder.show();
     }
 
