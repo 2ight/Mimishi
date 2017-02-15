@@ -27,6 +27,7 @@ import com.mimishi.mimishi.ui.fragment.MainFragment;
 import com.mimishi.mimishi.update.SearchUpdate;
 import com.mimishi.mimishi.utils.LogUtils;
 import com.mimishi.mimishi.utils.PrefUtils;
+import com.mimishi.mimishi.utils.ToastUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
@@ -106,12 +107,13 @@ public class MainActivity extends BaseActivity {
                 }, 1000 * 60 * 0);
             }
         }
+        ToastUtils.showMessage(this, "new version");
 
         checkUpdate();
     }
 
     private void checkUpdate() {
-        int versionCode = 1;
+        int versionCode = 3;
         PackageManager pm = this.getPackageManager();
         try {
             PackageInfo info = pm.getPackageInfo(this.getPackageName(), 0);
