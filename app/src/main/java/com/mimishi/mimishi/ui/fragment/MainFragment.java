@@ -62,7 +62,7 @@ public class MainFragment extends BaseFragment{
                 isRefresh = true;
             }
         });
-//        getDataList();
+        getDataList();
         return view;
     }
 

@@ -73,10 +73,10 @@ public class MainActivity extends BaseActivity {
 
         MainViewPagerAdapter viewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager(), this);
         viewPagerAdapter.addFragment(new MainFragment(1));
-//        viewPagerAdapter.addFragment(new MainFragment(2));
-//        viewPagerAdapter.addFragment(new MainFragment(2));
-//        viewPagerAdapter.addFragment(new MainFragment(2));
-//        viewPagerAdapter.addFragment(new MainFragment(2));
+        viewPagerAdapter.addFragment(new MainFragment(2));
+        viewPagerAdapter.addFragment(new MainFragment(2));
+        viewPagerAdapter.addFragment(new MainFragment(2));
+        viewPagerAdapter.addFragment(new MainFragment(2));
 
         mMainViewPager.setAdapter(viewPagerAdapter);
         mTabLayout.setupWithViewPager(mMainViewPager);
@@ -114,7 +114,6 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onNext(VerifyingUsers usersList) {
                 mUsersList = usersList.list;
-                LogUtils.i("获取到列报表", String.valueOf(mUsersList.size()));
                 mHandler = new Handler() {
                     @Override
                     public void handleMessage(Message msg) {
@@ -125,6 +124,7 @@ public class MainActivity extends BaseActivity {
                                 showSuccessDialog();
                                 break;
                             case 0:
+                                mProgressDialog.dismiss();
                                 showFailedDialog();
                                 break;
                         }
@@ -169,26 +169,15 @@ public class MainActivity extends BaseActivity {
     }
 
     private void showProgressDialog() {
-/*
-        LayoutInflater inflater = LayoutInflater.from(mContext);
-        View progressView = inflater.inflate(R.layout.dialog_progress_bar, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-*/
-//        ProgressDialog.show(this, "", "正在验证，请稍后...", true, false);
+
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setMessage("正在验证，请稍后...");
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setCancelable(false);
         mProgressDialog.show();
 
-
-//        builder.setView(progressView).setCancelable(false);
-//        mProgressDialog = builder.create();
-//                builder.show();
-//        mProgressDialog = builder.create();
     }
 
-    // TODO: 17-2-15 progressdialog 的dismiss()
-    
     public void showSignDialog() {
         PrefUtils.setIsShowedSignDialog(true);
         LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -197,7 +186,7 @@ public class MainActivity extends BaseActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setCancelable(false);
         builder.setTitle("提示")
-                .setMessage("系统检测到用户尚未注册， 请输入激活码.\n如需获取激活码请联系群管理员")
+                .setMessage("系统检测到用户尚未注册， 请输入激活码.\n如需获取激活码请联系QQ179727984管理员3元永久")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

@@ -7,12 +7,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 
-
-import com.example.chen.memo.bean.GithubUpdate;
-import com.example.chen.memo.utils.LogUtils;
-import com.example.chen.memo.utils.PrefUtils;
-import com.example.chen.memo.utils.ToastUtils;
 import com.google.gson.Gson;
+import com.mimishi.mimishi.model.GithubUpdate;
+import com.mimishi.mimishi.utils.LogUtils;
+import com.mimishi.mimishi.utils.ToastUtils;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -30,7 +28,7 @@ public class SearchUpdate {
 
     private Handler mHandler;
     private Context mContext;
-    private final String version_url = "https://raw.githubusercontent.com/bdpqchen/UpdateApps/master/memo/latest/latest.json";
+    private final String version_url = "https://raw.githubusercontent.com/mimishi705911/Mimishi/master/memo/latest/latest.json";
     private boolean isAuto;
     private DialogInterface.OnClickListener newApkDownLoadListener;
 
